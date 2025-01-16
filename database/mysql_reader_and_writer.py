@@ -20,16 +20,22 @@ class MySqlConnection:
                     for row in cursor.fetchall()]
         return results
     
-    def writer(self,query):
-        logger.info(f'Running query {query}')
-        cursor=self.connection.cursor()
-        result=cursor.execute(query)
+    def writer(self, query):
+        logger.info(f'Running query: {query}')
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        affected_rows = cursor.rowcount  # Number of rows affected by the query
         self.connection.commit()
         cursor.close()
-        logger.info("Query ran succesfully")
-    
+
+        if affected_rows > 0:
+            logger.info("Query ran successfully")
+            return {'message':"Query ran successfully"}  # Return the number of affected rows
+        else:
+            logger.warning("No rows were affected by the query")
+            return 0
 
 
 
-mysql_connection_obj = MySqlConnection(host="localhost",user='root',password='54321',
-                    database='lib_management_sys')
+mysql_connection_obj = MySqlConnection(host="localhost",user='root',password='12345',
+                    database='app_track_sys')
