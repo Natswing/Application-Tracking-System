@@ -17,7 +17,7 @@ class SignupBody(BaseModel):
     
 
 class LoginBody(BaseModel):
-    email:str
+    email:EmailStr
     password:str
 
 class OptionalFilters(BaseModel):
