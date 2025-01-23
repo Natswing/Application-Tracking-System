@@ -1,11 +1,13 @@
 from fastapi import HTTPException
 from database.mysql_reader_and_writer import *
 from utility.utils import *
+from utility.security import *
 from loguru import logger
 from datetime import datetime
 
 def user_signup_logic(user_input):
     logger.info(f"{user_input}")
+
     username=user_input['username']
     password=user_input['password']
     email=user_input["email"]
@@ -13,9 +15,14 @@ def user_signup_logic(user_input):
     phone=user_input.get("phone")
     logger.info(phone)
     created_at=datetime.now()
-    result = login_checker(username,password)
-    logger.info(f"{len(result)}")
-    if len(result) != 0:
+
+    existing_user = login_checker(username)
+    logger.info(f"{len(existing_user)}")
+
+    hashed_password=hash_password(password)
+    logger.info(f"Hashed password: {hashed_password}")
+
+    if existing_user:
         raise HTTPException(status_code=406, detail="User already exists.")
     else:
         logger.info("Inserting data into table.")
@@ -23,12 +30,12 @@ def user_signup_logic(user_input):
             if phone:  # If phone is provided
                 insert_query = f'''
                     INSERT INTO user_info (username, password, email, role, phone, created_at)
-                    VALUES ('{username}', '{password}', '{email}', '{role}', '{phone}', '{created_at}')
+                    VALUES ('{username}', '{hashed_password}', '{email}', '{role}', '{phone}', '{created_at}')
                 '''
             else:  # If phone is not provided, insert NULL
                 insert_query = f'''
                     INSERT INTO user_info (username, password, email, role, phone, created_at)
-                    VALUES ('{username}', '{password}', '{email}', '{role}', NULL, '{created_at}')
+                    VALUES ('{username}', '{hashed_password}', '{email}', '{role}', NULL, '{created_at}')
                 '''
             mysql_connection_obj.writer(insert_query)
             return {"Message": "Signup Successful"}

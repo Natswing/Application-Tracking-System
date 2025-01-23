@@ -1,6 +1,7 @@
 from typing import Union
 from loguru import logger
 from fastapi import FastAPI,Query
+from fastapi.middleware.cors import CORSMiddleware
 from schema.schema import *
 from login.login import *
 from signup.signup import *
@@ -11,6 +12,18 @@ import uvicorn
 from typing import List
 
 app = FastAPI()
+
+origins=[
+    "http://localhost:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/candidates/userSignup")
 def new_user_signup(user_data:SignupBody):
