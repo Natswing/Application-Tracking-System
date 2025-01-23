@@ -1,0 +1,28 @@
+/* Ensure the body and HTML take up the full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Make the main container take the full height */
+.container {
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure form elements take appropriate width */
+.form-control {
+  width: 100%;
+  max-width: 400px;
+}
+
+.btn-primary {
+  width: 100%;
+  max-width: 400px;
+}
