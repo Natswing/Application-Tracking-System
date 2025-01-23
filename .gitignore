@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 env/
+=======
+app_venv/
+>>>>>>> feature/vaishnavi/100125
 # Ignore Python cache files
 __pycache__/
 *.pyc
